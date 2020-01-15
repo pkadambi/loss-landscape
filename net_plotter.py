@@ -211,6 +211,8 @@ def create_random_direction(net, dir_type='weights', ignore='biasbn', norm='filt
     # random direction
     if dir_type == 'weights':
         weights = get_weights(net) # a list of parameters.
+        # import pdb
+        # pdb.set_trace()
         direction = get_random_weights(weights)
         normalize_directions_for_weights(direction, weights, norm, ignore)
     elif dir_type == 'states':
@@ -235,7 +237,7 @@ def setup_direction(args, dir_file, net):
         f = h5py.File(dir_file, 'r')
         if (args.y and 'ydirection' in f.keys()) or 'xdirection' in f.keys():
             f.close()
-            print ("%s is already setted up" % dir_file)
+            print ("%s Direction file is already set up" % dir_file)
             return
         f.close()
 

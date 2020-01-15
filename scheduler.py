@@ -58,7 +58,7 @@ def split_inds(num_inds, nproc):
     return splitted_idx
 
 
-def get_job_indices(vals, xcoordinates, ycoordinates, comm):
+def get_job_indices(vals, xcoordinates, ycoordinates, comm=None):
     """
     Prepare the job indices over which coordinate to calculate.
 
@@ -76,8 +76,12 @@ def get_job_indices(vals, xcoordinates, ycoordinates, comm):
 
     inds, coords = get_unplotted_indices(vals, xcoordinates, ycoordinates)
 
-    rank = 0 if comm is None else comm.Get_rank()
-    nproc = 1 if comm is None else comm.Get_size()
+    #This stuff is for multi-gpu, removing it and setting some defaults
+    # rank = 0 if comm is None else comm.Get_rank()
+    # nproc = 1 if comm is None else comm.Get_size()
+
+    rank = 0
+    nproc = 1
     splitted_idx = split_inds(len(inds), nproc)
 
     # Split the indices over the available MPI processes
@@ -86,5 +90,6 @@ def get_job_indices(vals, xcoordinates, ycoordinates, comm):
 
     # Figure out the number of jobs that each MPI process needs to calculate.
     inds_nums = [len(idx) for idx in splitted_idx]
-
+    # import pdb
+    # pdb.set_trace()
     return inds, coords, inds_nums
